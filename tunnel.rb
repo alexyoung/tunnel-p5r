@@ -11,8 +11,8 @@ class Tunnel < Processing::App
       @inverse = 1.0 / @precision
       @table_length = (360.0 * @inverse).to_i
 
-      @direction_x = 4
-      @direction_y = 4
+      @direction_x = 5
+      @direction_y = 0
 
       (0..@table_length).each do |i|
         @sin_table[i] = Math.sin i * (Math::PI / 180) * @precision
@@ -21,8 +21,8 @@ class Tunnel < Processing::App
     end
 
     def self.change_direction
-      @direction_x += @sin_table[@direction_x]
-      @direction_x = 4 if @direction_x > 8
+      @direction_x += 0.5 - rand if rand > 0.98
+      @direction_y += 0.5 - rand if rand > 0.98
     end
 
     def self.sin_table
@@ -102,7 +102,7 @@ class Tunnel < Processing::App
     
     Lookup.generate
 
-    @ring_size_limit = 16
+    @ring_size_limit = 256
     @palette = make_palette
     @rings = []
 
@@ -123,9 +123,9 @@ class Tunnel < Processing::App
   
     @rings.delete_if { |ring| ring.diameter > 400 }
 
-    if @rings.size < @ring_size_limit and @rings.last.diameter > 7
+    if @rings.size < @ring_size_limit and @rings.last.diameter > 6
       Lookup.change_direction
-      add_ring 0, @rings.last.offset + 20
+      add_ring 0, @rings.last.offset + 2
     end
   end
 
